@@ -1,5 +1,5 @@
 <?php
-$filename = dirname(__FILE__, 4).'/secret/transferagain-dbconfig.php';
+$filename = dirname(__FILE__, 3).'/secret/transferagain-dbconfig.php';
 
 if (file_exists($filename)) {
     require_once $filename;
