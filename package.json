@@ -1,0 +1,22 @@
+{
+  "name": "transferagain",
+  "version": "1.0.0",
+  "description": "Money Management System",
+  "dependencies": {
+    "prettier": "^2.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "prettier": "prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NanoCode012/TransferAgain.git"
+  },
+  "author": "NanoCode012",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/NanoCode012/TransferAgain/issues"
+  },
+  "homepage": "https://github.com/NanoCode012/TransferAgain#readme"
+}

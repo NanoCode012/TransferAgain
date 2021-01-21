@@ -4,3 +4,6 @@ composer.phar
 
 # Mac hidden files
 .*
+
+# Node
+/node_modules/
