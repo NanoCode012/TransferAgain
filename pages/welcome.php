@@ -6,7 +6,7 @@
     <h2>Welcome, <b><?= $display_name ?></b>!</h2>
 
     <p>
-        <a href="" class="btn btn-info">View</a>
+        <a href="?p=view" class="btn btn-info">View</a>
         <a href="?p=reset" class="btn btn-warning">Reset</a>
         <a href="?p=logout" class="btn btn-danger">Sign Out</a>
     </p>
