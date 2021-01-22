@@ -14,6 +14,7 @@ include 'utils/functions.php';
     <meta name="description" content="Transferagain | Site for managing money">
 
     <!-- Fonts and icons -->
+    <script src="https://kit.fontawesome.com/c7e4a0e972.js" crossorigin="anonymous"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
