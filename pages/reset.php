@@ -8,6 +8,7 @@
         </div>
         <div class="form-group">
             <button name="reset" type="submit" class="btn btn-primary">Reset</button>
+            <a href="?p=welcome" class="btn btn-dark">Back</a>
         </div>
     </form>
 </div>
