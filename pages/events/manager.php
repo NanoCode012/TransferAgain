@@ -21,7 +21,7 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventfailedadd);
     }
-} elseif (isset($_POST['add_expense'])) {
+} else if (isset($_POST['add_expense'])) {
     $dict = [
         'event_id' => '0',
         'item_amount' => '0',
@@ -52,6 +52,32 @@ if (isset($_POST['create_event'])) {
         }
     } else {
         $msgBox = error($m_eventexpensefailedadd);
+    }
+} else if (isset($_POST['add_member'])) {
+    $dict = [
+        'event_id' => '0',
+        'user_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+
+        if (
+            $db->insert('events_members', [
+                'event_id' => $dict['event_id'],
+                'user_id' => $dict['user_id'],
+            ])
+        ) {
+            $msgBox = success($m_eventmemberadded);
+            $_SESSION['msgBox'] = $msgBox;
+            header('Location: ?p=events/addmember&id=' . $dict['event_id']);
+            exit();
+        } else {
+            $msgBox = error($m_eventmemberfailedadd);
+        }
+    } else {
+        $msgBox = error($m_eventmemberfailedadd);
     }
 }
 

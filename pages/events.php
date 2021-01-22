@@ -24,7 +24,19 @@
                 <td><?= $row['id'] ?></td>
                 <td><?= $row['event_name'] ?></td>
                 <td><?= $events_status[$row['event_status']] ?></td>
-                <td><a type="button" href="?p=events/addexpense&id=<?= $row['id'] ?>"> <span style="color: Blue;"><i class="fas fa-plus-square fa-2x --fa-primary-color"></i></span></a></td>
+                <td>
+                    <a type="button" href="?p=events/addexpense&id=<?= $row['id'] ?>">
+                        <span style="color: Blue;">
+                            <i class="fas fa-plus-square fa-2x"></i>
+                        </span>
+                    </a>
+
+                    <a type="button" href="?p=events/addmember&id=<?= $row['id'] ?>">
+                        <span style="color: Brown;">
+                            <i class="fas fa-user-circle fa-2x"></i>
+                        </span>
+                    </a>
+                </td>
             </tr>
             <?php }
           }
