@@ -20,6 +20,7 @@ else {
     }
 }
 
-$servertitle = 'TransferAgain' . ' | ' . ucwords($page);
+$title = str_replace('/', ' ', $page);
+$servertitle = 'TransferAgain' . ' | ' . ucwords($title);
 
 ?>
