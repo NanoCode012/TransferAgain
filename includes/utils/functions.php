@@ -1,6 +1,5 @@
 <?php
-function alertBox($message, $ref = '#', $btnTxt = 'Close')
-{
+function alertBox($message, $ref = '#', $btnTxt = 'Close'){
     return  <<<HTML
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -67,7 +66,7 @@ function error($message=''){
             HTML;
 }
 
-function getStudentName($student_id) {
+function getStudentName($student_id){
     $client = new \GuzzleHttp\Client([
         'base_uri' => 'http://reg.siit.tu.ac.th/',
         'timeout'  => 2.0,
@@ -87,8 +86,19 @@ function getStudentName($student_id) {
     $s = $dom->find('td[width=250]', 0)->innertext;
     $result = explode('<br', $s)[0];
 
-    if (strlen($result) > 0 && strlen(trim($result)) == 0 or $result == null) $result = 'N/A';
+    if (strlen($result) > 0 && strlen(trim($result)) == 0 or $result == null) $result = null;
 
     return $result;
+}
+
+function checkDictwithPOST(&$dict, &$msgBox){
+    foreach ($dict as $key => $value) {
+        if (!isset($_POST[$key]) || trim($_POST[$key]) == '') {
+            $msgBox = error($key . ' error');
+            break;
+        } else {
+            $dict[$key] = trim($_POST[$key]);
+        }
+    }
 }
 ?>

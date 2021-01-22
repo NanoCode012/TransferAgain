@@ -3,22 +3,16 @@
 if (isset($_POST['login'])) {
     $dict = [
         'username' => '0',
-        'password' => '0'
+        'password' => '0',
     ];
 
-    foreach ($dict as $key => $value) {
-        if (!isset($_POST[$key]) || trim($_POST[$key]) == '') {
-            $msgBox = error($key . ' error');
-            break;
-        } else {
-            $dict[$key] = trim($_POST[$key]);
-        }
-    }
+    checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
         if (
             $result = $db->row(
-                'SELECT id, password from users WHERE username = ?',
+                'SELECT id, password from users WHERE username = ? or student_id = ? LIMIT 1',
+                $dict['username'],
                 $dict['username']
             )
         ) {
@@ -39,19 +33,18 @@ if (isset($_POST['login'])) {
     }
 } elseif (isset($_POST['register'])) {
     $dict = [
-        'username' => '0',
-        'password' => '0'
+        'password' => '0',
     ];
-    foreach ($dict as $key => $value) {
-        if (!isset($_POST[$key]) || trim($_POST[$key]) == '') {
-            $msgBox = error($key . ' error');
-            break;
-        } else {
-            $dict[$key] = trim($_POST[$key]);
-        }
-    }
+
+    checkDictwithPOST($dict, $msgBox);
+
     if (!isset($msgBox)) {
         $password_hash = password_hash($dict['password'], PASSWORD_DEFAULT);
+
+        $dict['username'] =
+            !isset($_POST['username']) || trim($_POST['username']) == ''
+                ? $_SESSION['student_id']
+                : trim($_POST['username']);
 
         $result = $db->cell(
             'SELECT COUNT(id) from users WHERE username = ?',
@@ -62,9 +55,12 @@ if (isset($_POST['login'])) {
             if (
                 $stmt = $db->insert('users', [
                     'username' => $dict['username'],
-                    'password' => $password_hash
+                    'password' => $password_hash,
+                    'student_id' => $_SESSION['student_id'],
+                    'display_name' => $_SESSION['student_name'],
                 ])
             ) {
+                session_destroy();
                 $msgBox = success($m_registersuccess);
             } else {
                 $msgBox = error($m_registererror);
@@ -78,14 +74,7 @@ if (isset($_POST['login'])) {
         'password' => '0',
     ];
 
-    foreach ($dict as $key => $value) {
-        if (!isset($_POST[$key]) || trim($_POST[$key]) == '') {
-            $msgBox = error($key . ' error');
-            break;
-        } else {
-            $dict[$key] = trim($_POST[$key]);
-        }
-    }
+    checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
         $password_hash = password_hash($dict['password'], PASSWORD_DEFAULT);
@@ -108,6 +97,35 @@ if (isset($_POST['login'])) {
             }
         } else {
             $msgBox = error($m_reseterror);
+        }
+    }
+} elseif (isset($_POST['reg_student_id'])) {
+    $dict = [
+        'student_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+        $result = $db->cell(
+            'SELECT COUNT(id) from users WHERE student_id = ?',
+            $dict['student_id']
+        );
+
+        if ($result == 0) {
+            $dict['student_name'] = getStudentName($dict['student_id']);
+            if (!is_null($dict['student_name'])) {
+                session_destroy();
+                session_start();
+                $_SESSION['student_id'] = trim($dict['student_id']);
+                $_SESSION['student_name'] = trim($dict['student_name']);
+                header('Location: index.php?p=register');
+                exit();
+            } else {
+                $msgBox = error($m_registererror);
+            }
+        } else {
+            $msgBox = error($m_registererror);
         }
     }
 }

@@ -1,9 +1,9 @@
 <?php
-    $username = $db->cell('select username from users where id=?', $_SESSION['user_id']);
+    $display_name = $db->cell('select display_name from users where id=?', $_SESSION['user_id']);
 ?>
 
 <div class="wrapper">
-    <h1>Hi, <b><?= $username ?></b>. Welcome to our site.</h1>
+    <h2>Welcome, <b><?= $display_name ?></b>!</h2>
 
     <p>
         <a href="" class="btn btn-info">View</a>
