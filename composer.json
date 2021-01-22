@@ -1,5 +1,7 @@
 {
     "require": {
-        "paragonie/easydb": "^2"
+        "paragonie/easydb": "^2",
+        "voku/simple_html_dom": "^4.7",
+        "guzzlehttp/guzzle": "7.0"
     }
 }

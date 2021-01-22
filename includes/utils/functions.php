@@ -66,4 +66,29 @@ function error($message=''){
             </script>
             HTML;
 }
+
+function getStudentName($student_id) {
+    $client = new \GuzzleHttp\Client([
+        'base_uri' => 'http://reg.siit.tu.ac.th/',
+        'timeout'  => 2.0,
+    ]);
+    
+    $r = $client->request('POST', 'http://reg.siit.tu.ac.th/registrar/learn_time.asp', [
+        'form_params' => [
+                'f_studentcode' => $student_id,
+                'f_cmd' => 1
+            ]
+                
+    ]);
+    
+    $body =  (string) $r->getBody();
+    $dom = \voku\helper\HtmlDomParser::str_get_html($body);
+    
+    $s = $dom->find('td[width=250]', 0)->innertext;
+    $result = explode('<br', $s)[0];
+
+    if (strlen($result) > 0 && strlen(trim($result)) == 0 or $result == null) $result = 'N/A';
+
+    return $result;
+}
 ?>
