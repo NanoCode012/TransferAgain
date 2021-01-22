@@ -9,4 +9,14 @@
     $m_reseterror = 'Failed to reset';
 
     $m_pageunknown = 'Page not found';
+
+    
+    // Events messages
+    $events_status = array('Open', 'Closed');
+    $m_eventadded = 'Added event';
+    $m_eventfailedadd = 'Failed to add event';
+    $m_eventfailedfind = 'Failed to find event';
+    $m_eventexpenseadded = 'Added event expense';
+    $m_eventexpensefailedadd = 'Failed to add event expense';
+
 ?>
