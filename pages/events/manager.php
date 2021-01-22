@@ -45,7 +45,7 @@ if (isset($_POST['create_event'])) {
         ) {
             $msgBox = success($m_eventexpenseadded);
             $_SESSION['msgBox'] = $msgBox;
-            header('Location: ?p=events/addexpense&id='.$dict['event_id']);
+            header('Location: ?p=events/addexpense&id=' . $dict['event_id']);
             exit();
         } else {
             $msgBox = error($m_eventexpensefailedadd);
