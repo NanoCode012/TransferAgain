@@ -1,5 +1,14 @@
 <?php
-    $display_name = $db->cell('select display_name from users where id=?', $_SESSION['user_id']);
+$display_name = $db->cell(
+    'select display_name from users where id=?',
+    $_SESSION['user_id']
+);
+if (is_null($display_name) or trim($display_name) == '') {
+    $display_name = $db->cell(
+        'select username from users where id=?',
+        $_SESSION['user_id']
+    );
+}
 ?>
 
 <div class="wrapper">
