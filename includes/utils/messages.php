@@ -22,5 +22,7 @@
 
     $m_eventmemberadded = 'Added member to event';
     $m_eventmemberfailedadd = 'Failed to add member to event';
+    $m_eventmemberremoved = 'Removed member from event';
+    $m_eventmemberfailedremove = 'Failed to remove member from event';
 
 ?>

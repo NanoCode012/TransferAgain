@@ -31,9 +31,15 @@
                         </span>
                     </a>
 
-                    <a type="button" href="?p=events/addmember&id=<?= $row['id'] ?>">
+                    <a type="button" href="?p=events/modmember&id=<?= $row['id'] ?>">
                         <span style="color: Brown;">
                             <i class="fas fa-user-circle fa-2x"></i>
+                        </span>
+                    </a>
+
+                    <a type="button" href="?p=events/viewexpense&id=<?= $row['id'] ?>&type=0">
+                        <span style="color: Darkgreen;">
+                            <i class="fas fa-search fa-2x"></i>
                         </span>
                     </a>
                 </td>

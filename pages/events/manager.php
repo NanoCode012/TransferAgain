@@ -30,17 +30,17 @@ if (isset($_POST['create_event'])) {
     checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
-        $dict['item_disc'] =
-            !isset($_POST['item_disc']) || trim($_POST['item_disc']) == ''
-                ? ''
-                : trim($_POST['item_disc']);
+        $dict['item_notes'] =
+            !isset($_POST['item_notes']) || trim($_POST['item_notes']) == ''
+                ? null
+                : trim($_POST['item_notes']);
 
         if (
             $db->insert('events_expense_history', [
                 'event_id' => $dict['event_id'],
                 'user_id' => $_SESSION['user_id'],
                 'amount' => $dict['item_amount'],
-                'notes' => $dict['item_disc'],
+                'notes' => $dict['item_notes'],
             ])
         ) {
             $msgBox = success($m_eventexpenseadded);
@@ -71,13 +71,39 @@ if (isset($_POST['create_event'])) {
         ) {
             $msgBox = success($m_eventmemberadded);
             $_SESSION['msgBox'] = $msgBox;
-            header('Location: ?p=events/addmember&id=' . $dict['event_id']);
+            header('Location: ?p=events/modmember&id=' . $dict['event_id']);
             exit();
         } else {
             $msgBox = error($m_eventmemberfailedadd);
         }
     } else {
         $msgBox = error($m_eventmemberfailedadd);
+    }
+} else if (isset($_POST['remove_member'])) {
+    $dict = [
+        'event_id' => '0',
+        'user_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+
+        if (
+            $db->delete('events_members', [
+                'event_id' => $dict['event_id'],
+                'user_id' => $dict['user_id'],
+            ])
+        ) {
+            $msgBox = success($m_eventmemberremoved);
+            $_SESSION['msgBox'] = $msgBox;
+            header('Location: ?p=events/modmember&id=' . $dict['event_id']);
+            exit();
+        } else {
+            $msgBox = error($m_eventmemberfailedremove);
+        }
+    } else {
+        $msgBox = error($m_eventmemberfailedremove);
     }
 }
 
