@@ -35,7 +35,7 @@ function success($message=''){
             <script>
             $(function () {
                 $.notify({
-                    title: 'SUCCESS',
+                    title: '[SUCCESS]',
                     message: '{$message}'
                 },
                 {   
@@ -53,7 +53,7 @@ function error($message=''){
             <script>
             $(function () {
                 $.notify({
-                    title: 'ERROR',
+                    title: '[ERROR]',
                     message: '{$message}'
                 },
                 {   
