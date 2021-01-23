@@ -25,19 +25,19 @@
                 <td><?= $row['event_name'] ?></td>
                 <td><?= $events_status[$row['event_status']] ?></td>
                 <td>
-                    <a type="button" href="?p=events/addexpense&id=<?= $row['id'] ?>">
+                    <a href="?p=events/addexpense&id=<?= $row['id'] ?>">
                         <span style="color: Blue;">
                             <i class="fas fa-plus-square fa-2x"></i>
                         </span>
                     </a>
 
-                    <a type="button" href="?p=events/modmember&id=<?= $row['id'] ?>">
+                    <a href="?p=events/modmember&id=<?= $row['id'] ?>">
                         <span style="color: Brown;">
                             <i class="fas fa-user-circle fa-2x"></i>
                         </span>
                     </a>
 
-                    <a type="button" href="?p=events/viewexpense&id=<?= $row['id'] ?>&type=0">
+                    <a href="?p=events/viewexpense&id=<?= $row['id'] ?>&type=0">
                         <span style="color: Darkgreen;">
                             <i class="fas fa-search fa-2x"></i>
                         </span>
