@@ -17,7 +17,7 @@
         <tbody>
             <?php
           $q =
-              'select e.id, e.event_name, e.event_status from events e, events_members em where em.user_id = ? and e.id = em.event_id';
+              'select e.id, e.event_name, e.event_status, e.creator_id from events e, events_members em where em.user_id = ? and e.id = em.event_id';
           if ($rows = $db->run($q, $_SESSION['user_id'])) {
               foreach ($rows as $row) { ?>
             <tr>
@@ -31,11 +31,13 @@
                         </span>
                     </a>
 
+                    <?php if ($row['creator_id'] == $_SESSION['user_id']) { ?>
                     <a href="?p=events/modmember&id=<?= $row['id'] ?>">
                         <span style="color: Brown;">
                             <i class="fas fa-user-circle fa-2x"></i>
                         </span>
                     </a>
+                    <?php } ?>
 
                     <a href="?p=events/viewexpense&id=<?= $row['id'] ?>&type=0">
                         <span style="color: Darkgreen;">
