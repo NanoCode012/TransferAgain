@@ -69,7 +69,7 @@ function error($message=''){
 function getStudentName($student_id){
     $client = new \GuzzleHttp\Client([
         'base_uri' => 'http://reg.siit.tu.ac.th/',
-        'timeout'  => 2.0,
+        'timeout'  => 5.0,
     ]);
     
     $r = $client->request('POST', 'http://reg.siit.tu.ac.th/registrar/learn_time.asp', [
