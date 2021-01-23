@@ -49,12 +49,12 @@ $usersJoined = $db->run(
     </div>
     <div class="form-group">
         <button name="remove_member" class="btn btn-danger" data-event-id="<?= $_GET['id'] ?>" data-toggle="modal"
-            data-target="#confirm-delete" <?php if (count($usersJoined) == 0) echo 'disabled'; ?>>Remove</button>
+            data-target="#DeleteModal" <?php if (count($usersJoined) == 0) echo 'disabled'; ?>>Remove</button>
         <a href="?p=events" class="btn btn-dark">Back</a>
     </div>
 </div>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -75,7 +75,7 @@ $usersJoined = $db->run(
 <script>
 $(document).ready(function() {
     // Bind click to OK button within popup
-    $('#confirm-delete').on('click', '.btn-ok', function(e) {
+    $('#DeleteModal').on('click', '.btn-ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
 
         var userId = $(this).data('userId');
@@ -96,7 +96,7 @@ $(document).ready(function() {
     });
 
     // Bind to modal opening to set necessary data properties to be used to make request
-    $('#confirm-delete').on('show.bs.modal', function(e) {
+    $('#DeleteModal').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
         var id = $('#remove-selector').val();
         $('.btn-ok', this).data('eventId', data.eventId);
