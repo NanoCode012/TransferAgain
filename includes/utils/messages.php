@@ -35,4 +35,8 @@
     $m_eventmemberremoved = 'Removed member from event';
     $m_eventmemberfailedremove = 'Failed to remove member from event';
 
+    // Transactions
+    $transaction_status = array('PENDING', 'COMPLETED');
+    $m_transactionset = 'Set transaction status';
+    $m_transactionfailedset = 'Failed to set transaction status';
 ?>

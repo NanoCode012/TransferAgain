@@ -13,6 +13,7 @@
             <tr>
                 <th>Event code</th>
                 <th>Event name</th>
+                <th>Event owner</th>
                 <th>Status</th>
                 <th>Operations</th>
             </tr>
@@ -20,12 +21,13 @@
         <tbody>
             <?php
           $q =
-              'select e.id, e.event_name, e.event_status, e.creator_id from events e, events_members em where em.user_id = ? and e.id = em.event_id';
+              'select e.id, e.event_name, e.event_status, e.creator_id, u.display_name from events e, events_members em, users u where em.user_id = ? and e.id = em.event_id and u.id = e.creator_id';
           if ($rows = $db->run($q, $_SESSION['user_id'])) {
               foreach ($rows as $row) { ?>
             <tr>
                 <td><?= $row['id'] ?></td>
                 <td><?= $row['event_name'] ?></td>
+                <td><?= $row['display_name'] ?></td>
                 <td>
                     <?php if ($row['event_status'] == 1) { ?>
                         <a href="" data-toggle="modal" data-target="#OpenModal" data-id="<?= $row['id'] ?>">
@@ -63,6 +65,14 @@
                             <i class="fas fa-search fa-2x"></i>
                         </span>
                     </a>
+
+                    <?php if ($row['event_status'] == 1) { ?>
+                    <a href="?p=events/viewtransaction&id=<?= $row['id'] ?>">
+                        <span style="color: Indigo;">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </span>
+                    </a>
+                    <?php } ?>
                 </td>
             </tr>
             <?php }

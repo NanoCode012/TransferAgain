@@ -240,7 +240,37 @@ if (isset($_POST['create_event'])) {
     }
 
     $noheader = true;
-}
+} else if (isset($_POST['set_transaction'])) {
+    $dict = [
+        'transaction_id' => '0',
+        'transaction_status' => '0',
+        'event_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+        if (
+            $db->update(
+                'transaction',
+                [
+                    'transaction_status' => $dict['transaction_status']
+                ],
+                [
+                    'id' => $dict['transaction_id'],
+                ]
+            )
+        ) {
+            $msgBox = success($m_transactionset);
+        } else {
+            $msgBox = error($m_transactionfailedset);
+        }
+    } else {
+        $msgBox = error($m_transactionfailedset);
+    }
+
+    $noheader = true;
+} 
 
 if (isset($msgBox)) {
     $_SESSION['msgBox'] = $msgBox;
