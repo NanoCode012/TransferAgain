@@ -73,6 +73,14 @@
                         </span>
                     </a>
                     <?php } ?>
+
+                    <?php if ($row['event_status'] == 1) { ?>
+                    <a href="?p=events/notification&id=<?= $row['id'] ?>">
+                        <span style="color: Orange;">
+                            <i class="fas fa-exclamation-circle fa-2x"></i>
+                        </span>
+                    </a>
+                    <?php } ?>
                 </td>
             </tr>
             <?php }
