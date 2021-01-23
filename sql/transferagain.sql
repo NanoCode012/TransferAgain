@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 23, 2021 at 09:21 AM
+-- Generation Time: Jan 23, 2021 at 10:20 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -115,6 +115,15 @@ CREATE TABLE `events_members` (
 --   `user_id`
 --       `users` -> `id`
 --
+
+--
+-- Triggers `events_members`
+--
+DROP TRIGGER IF EXISTS `Remove events_expenses`;
+DELIMITER $$
+CREATE TRIGGER `Remove events_expenses` AFTER DELETE ON `events_members` FOR EACH ROW DELETE FROM events_expense_history WHERE event_id = OLD.event_id AND user_id = OLD.user_id
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
