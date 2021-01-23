@@ -30,13 +30,13 @@
                 <td><?= $row['display_name'] ?></td>
                 <td>
                     <?php if ($row['event_status'] == 1) { ?>
-                        <a href="" data-toggle="modal" data-target="#OpenModal" data-id="<?= $row['id'] ?>">
+                        <a href="" data-toggle="modal" data-target="<?php if ($row['creator_id'] == $_SESSION['user_id']) echo '#OpenModal'; else echo '#InfoModal'; ?>" data-id="<?= $row['id'] ?>">
                             <span style="color: Red;">
                                 <i class="fas fa-lock fa-2x"></i>
                             </span>
                         </a>
                     <?php } else { ?>
-                        <a href="" data-toggle="modal" data-target="#CloseModal" data-id="<?= $row['id'] ?>">
+                        <a href="" data-toggle="modal" data-target="<?php if ($row['creator_id'] == $_SESSION['user_id']) echo '#CloseModal'; else echo '#InfoModal'; ?>" data-id="<?= $row['id'] ?>">
                             <span style="color: Green;">
                                 <i class="fas fa-lock-open fa-2x"></i>
                             </span>
@@ -181,6 +181,23 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-warning btn-ok" data-type="0">Open</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Only event owner can change event status!</h5>
+            </div>
+            <div class="modal-body">
+                Please contact event owner.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
