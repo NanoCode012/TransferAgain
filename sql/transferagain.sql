@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 23, 2021 at 10:20 AM
+-- Generation Time: Jan 23, 2021 at 11:33 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -23,6 +23,31 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `transferagain` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `transferagain`;
+
+DELIMITER $$
+--
+-- Procedures
+--
+DROP PROCEDURE IF EXISTS `Get total expense`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Get total expense` (IN `event_id` INT)  NO SQL
+BEGIN 
+    DROP TEMPORARY TABLE IF EXISTS `tmp`;
+    DROP TEMPORARY TABLE IF EXISTS `tmp2`;
+
+    CREATE TEMPORARY TABLE `tmp` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
+    CREATE TEMPORARY TABLE `tmp2` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
+
+    INSERT INTO `tmp` (display_name, amount, notes) select u.display_name, SUM(eh.amount), GROUP_CONCAT(notes SEPARATOR ', ') from events e, events_members em, events_expense_history eh, users u where e.id = em.event_id and e.id = eh.event_id and em.user_id = u.id and e.id = event_id and eh.user_id = u.id GROUP BY u.id;
+
+    INSERT INTO `tmp2` (display_name, amount, notes) select u.display_name, 0, null from users u where not u.display_name in (select display_name from `tmp`) and u.id in (select em.user_id from events_members em where em.event_id = event_id);
+
+    SELECT * FROM `tmp` UNION SELECT * FROM `tmp2`;
+
+    DROP TEMPORARY TABLE IF EXISTS `tmp`;
+    DROP TEMPORARY TABLE IF EXISTS `tmp2`;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
