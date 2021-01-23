@@ -17,6 +17,9 @@
     $m_eventfailedadd = 'Failed to add event';
     $m_eventfailedfind = 'Failed to find event';
 
+    $m_eventjoined = 'Joined event';
+    $m_eventfailedjoin = 'Failed to join event';
+
     $m_eventexpenseadded = 'Added event expense';
     $m_eventexpensefailedadd = 'Failed to add event expense';
     $m_eventexpenseremoved = 'Removed event expense';

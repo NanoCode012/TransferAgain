@@ -21,6 +21,42 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventfailedadd);
     }
+} else if (isset($_POST['join_event'])) {
+    $dict = [
+        'event_code' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+        $result = $db->cell(
+            'SELECT COUNT(id) from events WHERE id = ?',
+            $dict['event_code']
+        );
+
+        if ($result == 1) {
+            $result = $db->cell(
+                'SELECT COUNT(id) from events_members WHERE event_id = ? and user_id = ?',
+                $dict['event_code'],
+                $_SESSION['user_id']
+            );
+
+            if ($result == 0) {
+                $db->insert('events_members', [
+                    'event_name' => $dict['event_code'],
+                    'user_id' => $_SESSION['user_id'],
+                ]);
+
+                $msgBox = success($m_eventjoined);
+            } else {
+                $msgBox = error($m_eventfailedjoin);
+            }
+
+        } else {
+            $msgBox = error($m_eventfailedfind);
+        }
+    }
+        
 } else if (isset($_POST['add_expense'])) {
     $dict = [
         'event_id' => '0',

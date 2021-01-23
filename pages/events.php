@@ -1,8 +1,11 @@
 <div class="wrapper">
     <h2>My Events</h2>
     <div class="d-flex flex-row-reverse">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal" data-type="create">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" data-type="create">
             Add events
+        </button>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#JoinModal" data-type="create">
+            Join events
         </button>
     </div>
     <table data-toggle="table">
@@ -58,7 +61,7 @@
     <a href="?p=welcome" class="btn btn-dark">Back</a>
 </div>
 
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -78,6 +81,32 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button name='create_event' type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="JoinModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action='?p=events/manager' method='post'>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Join event</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="event_code">Event code</label>
+                        <input class="form-control" placeholder="Code" name="event_code" type="number">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button name='join_event' type="submit" class="btn btn-primary">Join</button>
                 </div>
             </form>
         </div>
