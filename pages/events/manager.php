@@ -97,7 +97,7 @@ if (isset($_POST['create_event'])) {
         ) {
             $msgBox = success($m_eventmemberremoved);
             $_SESSION['msgBox'] = $msgBox;
-            header('Location: ?p=events/modmember&id=' . $dict['event_id']);
+            // header('Location: ?p=events/modmember&id=' . $dict['event_id']);
             exit();
         } else {
             $msgBox = error($m_eventmemberfailedremove);
