@@ -36,7 +36,7 @@ $usersJoined = $db->run(
             <?php
             $q =
                 $_GET['type'] == 0
-                    ? 'CALL `Get total expense`(?)'
+                    ? 'CALL `Get total expense table`(?)'
                     : 'select eh.id, u.display_name, eh.user_id, eh.amount, eh.notes, e.creator_id from events_expense_history eh, users u, events e where e.id = eh.event_id and eh.event_id = ? and u.id = eh.user_id';
             if ($rows = $db->run($q, $_GET['id'])) {
                 foreach ($rows as $row) { ?>
