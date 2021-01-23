@@ -73,26 +73,28 @@ $usersJoined = $db->run(
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label for="event_name">Member name</label>
+                    <div class="form-group mb-3 modal-name">
+                        <label for="user_id">Member name</label>
                         <select class="form-control" name="user_id">
                             <?php foreach ($usersJoined as $user) {?>
                             <option value='<?= $user['id'] ?>'><?= $user['display_name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="amount">Amount</label>
-                        <input class="form-control" placeholder="Amount" name="amount" type="number">
+                    <div class="form-group mb-3 modal-amount">
+                        <label for="item_amount">Amount</label>
+                        <input class="form-control" placeholder="Amount" name="item_amount" type="number">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="notes">Notes</label>
-                        <input class="form-control" placeholder="OPTIONAL" name="notes" type="text">
+                    <div class="form-group mb-3 modal-notes">
+                        <label for="item_notes">Notes</label>
+                        <input class="form-control" placeholder="OPTIONAL" name="item_notes" type="text">
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input id="input_event_id" name="event_id" type="text" value="<?= $_GET['id'] ?>" hidden>
+                    <input id="input_event_expense_id" name="event_expense_id" type="text" hidden>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-warning">Save</button>
+                    <button name="save_expense" type="submit" class="btn btn-warning">Save</button>
                 </div>
             </form>
         </div>
@@ -149,8 +151,10 @@ $(document).ready(function() {
         var data = $(e.relatedTarget).data('service');
         var modal = $(this)
 
-        modal.find()
-        console.log(data);
+        modal.find('.modal-name select').val(data['user_id']).attr('selected','selected');
+        modal.find('.modal-amount input').val(data['amount']);
+        modal.find('.modal-notes input').val(data['notes']);
+        modal.find('#input_event_expense_id').val(data['id']);
     });
 });
 </script>

@@ -21,7 +21,7 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventfailedadd);
     }
-} else if (isset($_POST['join_event'])) {
+} elseif (isset($_POST['join_event'])) {
     $dict = [
         'event_code' => '0',
     ];
@@ -51,13 +51,11 @@ if (isset($_POST['create_event'])) {
             } else {
                 $msgBox = error($m_eventfailedjoin);
             }
-
         } else {
             $msgBox = error($m_eventfailedfind);
         }
     }
-        
-} else if (isset($_POST['add_expense'])) {
+} elseif (isset($_POST['add_expense'])) {
     $dict = [
         'event_id' => '0',
         'item_amount' => '0',
@@ -89,7 +87,44 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventexpensefailedadd);
     }
-} else if (isset($_POST['add_member'])) {
+} elseif (isset($_POST['save_expense'])) {
+    $dict = [
+        'user_id' => '0',
+        'item_amount' => '0',
+        'event_expense_id' => '0',
+        'event_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+        $dict['item_notes'] =
+            !isset($_POST['item_notes']) || trim($_POST['item_notes']) == ''
+                ? null
+                : trim($_POST['item_notes']);
+
+        if (
+            $db->update(
+                'events_expense_history',
+                [
+                    'user_id' => $dict['user_id'],
+                    'amount' => $dict['item_amount'],
+                    'notes' => $dict['item_notes'],
+                ],
+                ['id' => $dict['event_expense_id'], 'event_id' => $dict['event_id']]
+            )
+        ) {
+            $msgBox = success($m_eventexpensesaved);
+            $_SESSION['msgBox'] = $msgBox;
+            header('Location: ?p=events/viewexpense&id=' . $dict['event_id'] . '&type=1');
+            exit();
+        } else {
+            $msgBox = error($m_eventexpensefailedsave);
+        }
+    } else {
+        $msgBox = error($m_eventexpensefailedsave);
+    }
+} elseif (isset($_POST['add_member'])) {
     $dict = [
         'event_id' => '0',
         'user_id' => '0',
@@ -98,7 +133,6 @@ if (isset($_POST['create_event'])) {
     checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
-
         if (
             $db->insert('events_members', [
                 'event_id' => $dict['event_id'],
@@ -115,7 +149,7 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventmemberfailedadd);
     }
-} else if (isset($_POST['remove_member'])) {
+} elseif (isset($_POST['remove_member'])) {
     $dict = [
         'event_id' => '0',
         'user_id' => '0',
@@ -124,7 +158,6 @@ if (isset($_POST['create_event'])) {
     checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
-
         if (
             $db->delete('events_members', [
                 'event_id' => $dict['event_id'],
@@ -141,7 +174,7 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventmemberfailedremove);
     }
-} else if (isset($_POST['remove_expense'])) {
+} elseif (isset($_POST['remove_expense'])) {
     $dict = [
         'expenseId' => '0',
     ];
@@ -149,7 +182,6 @@ if (isset($_POST['create_event'])) {
     checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
-
         if (
             $db->delete('events_expense_history', [
                 'id' => $dict['expenseId'],

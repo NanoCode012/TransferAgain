@@ -24,6 +24,8 @@
     $m_eventexpensefailedadd = 'Failed to add event expense';
     $m_eventexpenseremoved = 'Removed event expense';
     $m_eventexpensefailedremove = 'Failed to remove event expense';
+    $m_eventexpensesaved = 'Saved expense';
+    $m_eventexpensefailedsave = 'Failed to save expense';
 
     $m_eventmemberadded = 'Added member to event';
     $m_eventmemberfailedadd = 'Failed to add member to event';
