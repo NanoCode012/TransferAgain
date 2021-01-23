@@ -3,7 +3,7 @@
     <p>Please fill in your credentials to login.</p>
     <form action="?p=authmanager" method="post">
         <div class="form-group">
-            <label>Username</label>
+            <label>Username or Student ID</label>
             <input type="text" name="username" class="form-control">
         </div>    
         <div class="form-group">
