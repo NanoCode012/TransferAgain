@@ -66,7 +66,7 @@
                         </span>
                     </a>
 
-                    <?php if ($row['event_status'] == 1) { ?>
+                    <?php if ($row['event_status'] == 1 && $row['creator_id'] == $_SESSION['user_id']) { ?>
                     <a href="?p=events/viewtransaction&id=<?= $row['id'] ?>">
                         <span style="color: Indigo;">
                             <i class="fas fa-file-alt fa-2x"></i>
@@ -74,13 +74,15 @@
                     </a>
                     <?php } ?>
 
-                    <?php if ($row['event_status'] == 1) { ?>
+                    <?php if ($row['event_status'] == 1 && $row['creator_id'] != $_SESSION['user_id']) { 
+                        $status = $db->cell('select transaction_status from transaction where event_id = ? and user_id = ?', $row['id'], $_SESSION['user_id']);
+                        if ($status == 0) { ?>
                     <a href="?p=events/notification&id=<?= $row['id'] ?>">
                         <span style="color: Orange;">
                             <i class="fas fa-exclamation-circle fa-2x"></i>
                         </span>
                     </a>
-                    <?php } ?>
+                    <?php } }?>
                 </td>
             </tr>
             <?php }
