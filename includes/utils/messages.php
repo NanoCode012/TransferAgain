@@ -17,6 +17,9 @@
     $m_eventfailedadd = 'Failed to add event';
     $m_eventfailedfind = 'Failed to find event';
 
+    $m_eventstatus = 'Changed event status';
+    $m_eventfailedstatus = 'Failed to change event status';
+
     $m_eventjoined = 'Joined event';
     $m_eventfailedjoin = 'Failed to join event';
 
