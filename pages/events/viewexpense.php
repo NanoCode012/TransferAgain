@@ -144,7 +144,6 @@ $(document).ready(function() {
         var data = $(e.relatedTarget).data('service');
 
         $('.btn-ok', this).data('expenseId', data.id);
-        console.log(data);
     });
 
     $('#EditModal').on('show.bs.modal', function(e) {
