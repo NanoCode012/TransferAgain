@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 16, 2021 at 12:30 PM
+-- Generation Time: Jan 23, 2021 at 09:21 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -38,6 +38,10 @@ CREATE TABLE `bankslips` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `bankslips`:
+--
+
 -- --------------------------------------------------------
 
 --
@@ -46,81 +50,71 @@ CREATE TABLE `bankslips` (
 
 DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
   `creator_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `event_name` varchar(255) NOT NULL,
-  `event_status` int(11) NOT NULL DEFAULT '1',
+  `event_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `event_status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `expense_history`
---
-
-DROP TABLE IF EXISTS `expense_history`;
-CREATE TABLE `expense_history` (
-  `id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `paid` int(11) NOT NULL,
-  `notes` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `expense_total`
---
-
-DROP TABLE IF EXISTS `expense_total`;
-CREATE TABLE `expense_total` (
-  `id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `total_expense` int(11) NOT NULL,
-  `notes` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `inventory`
---
-
-DROP TABLE IF EXISTS `inventory`;
-CREATE TABLE `inventory` (
-  `seller_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `item_name` text COLLATE utf8_unicode_ci NOT NULL,
-  `item_quantity` int(11) NOT NULL,
-  `item_cost` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `events`:
+--
+
+--
+-- Triggers `events`
+--
+DROP TRIGGER IF EXISTS `Add creator to joined list`;
+DELIMITER $$
+CREATE TRIGGER `Add creator to joined list` AFTER INSERT ON `events` FOR EACH ROW INSERT INTO events_members(`user_id`, `event_id`) VALUES (NEW.creator_id, NEW.id)
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `members`
+-- Table structure for table `events_expense_history`
 --
 
-DROP TABLE IF EXISTS `members`;
-CREATE TABLE `members` (
+DROP TABLE IF EXISTS `events_expense_history`;
+CREATE TABLE `events_expense_history` (
   `id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL,
-  `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `user_id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `notes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `events_expense_history`:
+--   `event_id`
+--       `events` -> `id`
+--   `user_id`
+--       `users` -> `id`
+--
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `status_enum`
+-- Table structure for table `events_members`
 --
 
-DROP TABLE IF EXISTS `status_enum`;
-CREATE TABLE `status_enum` (
-  `stat` int(11) NOT NULL,
-  `description` varchar(50) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `events_members`;
+CREATE TABLE `events_members` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `events_members`:
+--   `event_id`
+--       `events` -> `id`
+--   `user_id`
+--       `users` -> `id`
+--
 
 -- --------------------------------------------------------
 
@@ -135,22 +129,11 @@ CREATE TABLE `transaction` (
   `owe_amount` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `transaction_status` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `userinfo`
---
-
-DROP TABLE IF EXISTS `userinfo`;
-CREATE TABLE `userinfo` (
-  `user_id` int(11) NOT NULL,
-  `name` text COLLATE utf8_unicode_ci NOT NULL,
-  `delivery_address` text COLLATE utf8_unicode_ci NOT NULL,
-  `phone_number` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `transaction`:
+--
 
 -- --------------------------------------------------------
 
@@ -161,10 +144,16 @@ CREATE TABLE `userinfo` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `student_id` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+  `display_name` text COLLATE utf8_unicode_ci,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `users`:
+--
 
 --
 -- Indexes for dumped tables
@@ -174,25 +163,23 @@ CREATE TABLE `users` (
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
-  ADD PRIMARY KEY (`event_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `expense_history`
+-- Indexes for table `events_expense_history`
 --
-ALTER TABLE `expense_history`
-  ADD UNIQUE KEY `created_at` (`created_at`);
+ALTER TABLE `events_expense_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `members`
+-- Indexes for table `events_members`
 --
-ALTER TABLE `members`
-  ADD UNIQUE KEY `joined_at` (`joined_at`);
-
---
--- Indexes for table `status_enum`
---
-ALTER TABLE `status_enum`
-  ADD PRIMARY KEY (`stat`);
+ALTER TABLE `events_members`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -209,13 +196,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `events_expense_history`
+--
+ALTER TABLE `events_expense_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `events_members`
+--
+ALTER TABLE `events_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `events_expense_history`
+--
+ALTER TABLE `events_expense_history`
+  ADD CONSTRAINT `events_expense_history_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_expense_history_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `events_members`
+--
+ALTER TABLE `events_members`
+  ADD CONSTRAINT `events_members_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
