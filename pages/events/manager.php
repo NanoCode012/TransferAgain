@@ -105,6 +105,30 @@ if (isset($_POST['create_event'])) {
     } else {
         $msgBox = error($m_eventmemberfailedremove);
     }
+} else if (isset($_POST['remove_expense'])) {
+    $dict = [
+        'expenseId' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+
+        if (
+            $db->delete('events_expense_history', [
+                'id' => $dict['expenseId'],
+            ])
+        ) {
+            $msgBox = success($m_eventexpenseremoved);
+            $_SESSION['msgBox'] = $msgBox;
+            // header('Location: ?p=events/modmember&id=' . $dict['event_id']);
+            exit();
+        } else {
+            $msgBox = error($m_eventexpensefailedremove);
+        }
+    } else {
+        $msgBox = error($m_eventexpensefailedremove);
+    }
 }
 
 if (isset($msgBox)) {

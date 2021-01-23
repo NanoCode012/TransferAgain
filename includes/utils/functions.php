@@ -101,4 +101,28 @@ function checkDictwithPOST(&$dict, &$msgBox){
         }
     }
 }
+
+function editButton($data)
+{
+    $data = json_encode($data); //Must use single brace for data-service container!
+    return      <<<HTML
+                <button type="button" class="btn" data-toggle="modal" data-target="#EditModal" data-type="edit" data-service='{$data}'> 
+                <span style="color: Purple;">
+                <i class="fas fa-edit fa-2x"></i>
+                </span>
+                </button>
+                HTML;
+}
+
+function deleteButton($data)
+{
+    $data = json_encode($data); //Must use single brace for data-service container!
+    return      <<<HTML
+                <button type="button" class="btn" data-toggle="modal" data-target="#DeleteModal" data-type="delete" data-service='{$data}'> 
+                <span style="color: DarkRed;">
+                <i class="fas fa-trash fa-2x"></i>
+                </span>
+                </button>
+                HTML;
+}
 ?>
