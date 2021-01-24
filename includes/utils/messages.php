@@ -39,4 +39,8 @@
     $transaction_status = array('PENDING', 'COMPLETED');
     $m_transactionset = 'Set transaction status';
     $m_transactionfailedset = 'Failed to set transaction status';
+
+    // Mail
+    $m_mailsent = 'E-Mail sent';
+    $m_mailfailedsend = 'Failed to send e-mail';
 ?>

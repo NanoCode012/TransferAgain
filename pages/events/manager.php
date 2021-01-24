@@ -270,6 +270,72 @@ if (isset($_POST['create_event'])) {
     }
 
     $noheader = true;
+} else if (isset($_POST['send_email'])) {
+    $dict = [
+        'transaction_id' => '0',
+        'event_id' => '0',
+    ];
+
+    checkDictwithPOST($dict, $msgBox);
+
+    if (!isset($msgBox)) {
+        $creator_name = $db->cell('select u.display_name from transaction t, users u, events e where t.event_id = e.id and e.creator_id = u.id');
+
+        if ($dict['transaction_id'] != -1) {
+            $row = $db->row('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.id = ? and t.event_id = ?', $dict['transaction_id'], $dict['event_id']);
+            $row['creator_name'] = $creator_name;
+            $r = sendEmail($row);
+        } else {
+            $rows = $db->run('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.email_sent = 0 and t.event_id = ?', $dict['event_id']);
+            foreach ($rows as $row) {
+                $row['creator_name'] = $creator_name;
+                $r = sendEmail($row);
+                if ($r == 0) break;
+            }
+        }
+        
+        if ($r != 0) {
+            if ($dict['transaction_id'] != -1) {
+                if (
+                    $db->update(
+                        'transaction',
+                        [
+                            'email_sent' => 1
+                        ],
+                        [
+                            'id' => $dict['transaction_id'],
+                        ]
+                    )
+                ) {
+                    $msgBox = success($m_mailsent);
+                } else {
+                    $msgBox = error($m_mailfailedsend);
+                }
+            } else {
+                if (
+                    $db->update(
+                        'transaction',
+                        [
+                            'email_sent' => 1
+                        ],
+                        [
+                            'event_id' => $dict['event_id'],
+                        ]
+                    )
+                ) {
+                    $msgBox = success($m_mailsent);
+                } else {
+                    $msgBox = error($m_mailfailedsend);
+                }
+            }
+        } else {
+            $msgBox = error($m_mailfailedsend);
+        }
+    } else {
+        $msgBox = error($m_mailfailedsend);
+
+        $noheader = true;
+    }
 } 
 
 if (isset($msgBox)) {

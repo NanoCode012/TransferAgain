@@ -91,6 +91,39 @@ function getStudentName($student_id){
     return $result;
 }
 
+function sendEmail($data) {
+    require_once 'config/mailconf.php';
+
+    $data['subject'] = '[Event #' . $data['event_id'] . ']: ' . $data['event_name'] . ' (PENDING)';
+
+    $data['content'] = 'Event has been locked. Please read the below to settle the event costs. <br><br>';
+    if ($data['owe_amount'] > 0) {
+        $data['content'] .= 'You owe ' . $data['creator_name'] . ' <b>' . $data['owe_amount'] . '</b>';
+    } else {
+        $data['content'] .= $data['creator_name'] . ' owes you <b>' . $data['owe_amount']*(-1) . '</b>.';
+    }
+
+    $email = new \SendGrid\Mail\Mail(); 
+    $email->setFrom($mail_from, "Mail");
+    $email->setSubject($data['subject']);
+    $email->addTo($data['student_id'] . '@g.siit.tu.ac.th', $data['display_name']);
+    $email->addContent(
+        'text/html', $data['content'] . '<br><br>This is an automated message. Please do not reply.'
+    );
+    $sendgrid = new \SendGrid($sendgrid_api_key);
+    try {
+        $response = $sendgrid->send($email);
+        // print $response->statusCode() . "\n";
+        // print_r($response->headers());
+        // print $response->body() . "\n";
+    } catch (Exception $e) {
+        // echo 'Caught exception: '. $e->getMessage() ."\n";
+        $response = 0;
+    }
+
+    return $response;
+}
+
 function checkDictwithPOST(&$dict, &$msgBox){
     foreach ($dict as $key => $value) {
         if (!isset($_POST[$key]) || trim($_POST[$key]) == '') {
