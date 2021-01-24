@@ -37,7 +37,7 @@ $usersJoined = $db->run(
             $q =
                 $_GET['type'] == 0
                     ? 'CALL `Get total expense table`(?)'
-                    : 'select eh.id, u.display_name, eh.user_id, eh.amount, eh.notes, e.creator_id from events_expense_history eh, users u, events e where e.id = eh.event_id and eh.event_id = ? and u.id = eh.user_id';
+                    : 'select eh.id, u.display_name, eh.user_id, eh.amount, eh.notes, e.creator_id, e.event_status from events_expense_history eh, users u, events e where e.id = eh.event_id and eh.event_id = ? and u.id = eh.user_id';
             if ($rows = $db->run($q, $_GET['id'])) {
                 foreach ($rows as $row) { ?>
                 <tr>
@@ -47,7 +47,7 @@ $usersJoined = $db->run(
                     <td>
                         <?php 
                             if ($_GET['type'] == 1) {
-                                if ($row['creator_id'] == $_SESSION['user_id'] || $row['user_id'] == $_SESSION['user_id'])
+                                if (($row['creator_id'] == $_SESSION['user_id'] || $row['user_id'] == $_SESSION['user_id']) && ($row['event_status'] == 0))
                                     echo editButton($row) . '&nbsp' . deleteButton($row);
                             }
                         ?>
