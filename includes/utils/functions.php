@@ -104,7 +104,7 @@ function sendEmail($data) {
     }
 
     $email = new \SendGrid\Mail\Mail(); 
-    $email->setFrom($mail_from, "Mail");
+    $email->setFrom($mail_from, "no-reply");
     $email->setSubject($data['subject']);
     $email->addTo($data['student_id'] . '@g.siit.tu.ac.th', $data['display_name']);
     $email->addContent(
