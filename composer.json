@@ -2,6 +2,7 @@
     "require": {
         "paragonie/easydb": "^2",
         "voku/simple_html_dom": "^4.7",
-        "guzzlehttp/guzzle": "7.0"
+        "guzzlehttp/guzzle": "7.0",
+        "sendgrid/sendgrid": "~7"
     }
 }
