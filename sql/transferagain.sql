@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 23, 2021 at 08:18 PM
+-- Generation Time: Jan 24, 2021 at 06:02 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -23,6 +23,57 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `transferagain` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `transferagain`;
+
+DELIMITER $$
+--
+-- Procedures
+--
+DROP PROCEDURE IF EXISTS `Create transaction report`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Create transaction report` (IN `event_id` INT)  NO SQL
+BEGIN
+	CALL `Get total expense`(event_id);
+    #SELECT * FROM `tmp2`;
+    
+    SET @total = (SELECT SUM(amount) FROM `tmp2`);
+    SET @num_people = (SELECT COUNT(amount) FROM `tmp2`);
+    SET @owe = (SELECT CEILING(@total/@num_people));
+    
+    #SELECT @owe;
+    
+    DELETE FROM transaction WHERE transaction.event_id = event_id;
+    
+    INSERT INTO transaction (`event_id`, `user_id`, `owe_amount`) SELECT event_id, u.id, (@owe - t.amount) FROM users u, events e, tmp2 t WHERE t.display_name = u.display_name AND e.id = event_id AND u.id <> e.creator_id;
+    
+    # Set 0 owe_amount to finished
+    UPDATE transaction SET transaction_status = 1 WHERE transaction.event_id = event_id AND owe_amount = 0;
+
+    DROP TEMPORARY TABLE IF EXISTS `tmp2`;
+END$$
+
+DROP PROCEDURE IF EXISTS `Get total expense`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Get total expense` (IN `event_id` INT)  NO SQL
+BEGIN 
+    DROP TEMPORARY TABLE IF EXISTS `tmp`;
+    DROP TEMPORARY TABLE IF EXISTS `tmp2`;
+
+    CREATE TEMPORARY TABLE `tmp` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
+    CREATE TEMPORARY TABLE `tmp2` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
+
+    INSERT INTO `tmp` (display_name, amount, notes) select u.display_name, 0, null from users u where not u.display_name in (select display_name from `events_expense_total`) and u.id in (select em.user_id from events_members em where em.event_id = event_id);
+
+    INSERT INTO `tmp2` (display_name, amount, notes) SELECT display_name, amount, notes FROM `events_expense_total` et WHERE et.event_id = event_id UNION SELECT * FROM `tmp`;
+    
+    DROP TEMPORARY TABLE IF EXISTS `tmp`;
+END$$
+
+DROP PROCEDURE IF EXISTS `Get total expense table`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Get total expense table` (IN `event_id` INT)  NO SQL
+BEGIN
+	CALL `Get total expense`(event_id);
+    SELECT * FROM `tmp2`;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
