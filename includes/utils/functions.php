@@ -99,12 +99,11 @@ function sendEmail($data) {
     $data['content'] = 'Event has been locked. Please read the below to settle the event costs. <br><br>';
     if ($data['owe_amount'] > 0) {
         $data['content'] .= 'You owe ' . $data['creator_name'] . ' <b>' . $data['owe_amount'] . '.</b><br>';
+        $data['content'] .= 'Bank name: ' . $data['creator_bank_name'] . '<br>';
+        $data['content'] .= 'Bank number: ' . $data['creator_bank_number'] . '<br>';
     } else {
         $data['content'] .= $data['creator_name'] . ' owes you <b>' . $data['owe_amount']*(-1) . '.</b><br>.';
     }
-
-    $data['content'] .= 'Bank name: ' . $data['creator_bank_name'] . '<br>';
-    $data['content'] .= 'Bank number: ' . $data['creator_bank_number'] . '<br>';
 
     $email = new \SendGrid\Mail\Mail(); 
     $email->setFrom($mail_from, "TransferAgain");
