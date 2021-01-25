@@ -111,6 +111,7 @@ $(document).ready(function() {
         var $modalDiv = $(e.delegateTarget);
         var transaction_id = $(this).data('transaction_id');
         if (transaction_id !== null && transaction_id !== '') {
+            $('.btn-ok').prop('disabled', true);
             $.post('?p=events/manager', {
                 transaction_id: transaction_id,
                 event_id: <?= $_GET['id'] ?>,
