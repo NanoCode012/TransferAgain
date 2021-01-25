@@ -26,9 +26,9 @@ $usersJoined = $db->run(
     <table data-toggle="table">
         <thead>
             <tr>
-                <th>Members</th>
-                <th>Amount spent</th>
-                <th>Notes</th>
+                <th data-field="name" data-sortable="true">Members</th>
+                <th data-field="amount" data-sortable="true">Amount spent</th>
+                <th data-field="notes" data-sortable="true">Notes</th>
                 <th>Operations</th>
             </tr>
         </thead>

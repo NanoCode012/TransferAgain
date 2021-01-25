@@ -21,9 +21,9 @@ $count = $db->cell('select count(id) from transaction where event_id = ? and ema
     <table data-toggle="table">
         <thead>
             <tr>
-                <th>Members</th>
-                <th>Amount owed</th>
-                <th>Status</th>
+                <th data-field="name" data-sortable="true">Members</th>
+                <th data-field="amount" data-sortable="true">Amount owed</th>
+                <th data-field="status">Status</th>
                 <th>Operations</th>
             </tr>
         </thead>

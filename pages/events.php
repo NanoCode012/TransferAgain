@@ -11,17 +11,17 @@
     <table data-toggle="table">
         <thead>
             <tr>
-                <th>Event code</th>
-                <th>Event name</th>
-                <th>Event owner</th>
-                <th>Status</th>
+                <th data-field="code" data-sortable="true">Event code</th>
+                <th data-field="event_name" data-sortable="true">Event name</th>
+                <th data-field="owner_name" data-sortable="true">Event owner</th>
+                <th data-field="status">Status</th>
                 <th>Operations</th>
             </tr>
         </thead>
         <tbody>
             <?php
           $q =
-              'select e.id, e.event_name, e.event_status, e.creator_id, u.display_name from events e, events_members em, users u where em.user_id = ? and e.id = em.event_id and u.id = e.creator_id';
+              'select e.id, e.event_name, e.event_status, e.creator_id, u.display_name from events e, events_members em, users u where em.user_id = ? and e.id = em.event_id and u.id = e.creator_id order by e.event_status, e.id ASC';
           if ($rows = $db->run($q, $_SESSION['user_id'])) {
               foreach ($rows as $row) { ?>
             <tr>
