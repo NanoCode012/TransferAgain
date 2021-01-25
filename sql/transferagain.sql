@@ -59,7 +59,7 @@ BEGIN
     CREATE TEMPORARY TABLE `tmp` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
     CREATE TEMPORARY TABLE `tmp2` ( `display_name` VARCHAR(255) NOT NULL, `amount` INT NOT NULL, `notes` TEXT);
 
-    INSERT INTO `tmp` (display_name, amount, notes) select u.display_name, 0, null from users u where not u.display_name in (select display_name from `events_expense_total`) and u.id in (select em.user_id from events_members em where em.event_id = event_id);
+    INSERT INTO `tmp` (display_name, amount, notes) select u.display_name, 0, null from users u where not u.display_name in (select display_name from `events_expense_total` where `events_expense_total`.event_id = event_id) and u.id in (select em.user_id from events_members em where em.event_id = event_id);
 
     INSERT INTO `tmp2` (display_name, amount, notes) SELECT display_name, amount, notes FROM `events_expense_total` et WHERE et.event_id = event_id UNION SELECT * FROM `tmp`;
     
