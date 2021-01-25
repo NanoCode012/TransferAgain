@@ -285,14 +285,14 @@ if (isset($_POST['create_event'])) {
             $row = $db->row('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.id = ? and t.event_id = ?', $dict['transaction_id'], $dict['event_id']);
             $row['creator_name'] = $creator['display_name'];
             $row['creator_bank_name'] = $creator['name'];
-            $row['creator_bank_num'] = $creator['number'];
+            $row['creator_bank_number'] = $creator['number'];
             $r = sendEmail($row);
         } else {
             $rows = $db->run('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.email_sent = 0 and t.event_id = ?', $dict['event_id']);
             foreach ($rows as $row) {
                 $row['creator_name'] = $creator['display_name'];
                 $row['creator_bank_name'] = $creator['name'];
-                $row['creator_bank_num'] = $creator['number'];
+                $row['creator_bank_number'] = $creator['number'];
                 $r = sendEmail($row);
                 if ($r == 0) break;
             }

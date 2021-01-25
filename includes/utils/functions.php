@@ -98,9 +98,9 @@ function sendEmail($data) {
 
     $data['content'] = 'Event has been locked. Please read the below to settle the event costs. <br><br>';
     if ($data['owe_amount'] > 0) {
-        $data['content'] .= 'You owe ' . $data['creator_name'] . ' <b>' . $data['owe_amount'] . '</b>';
+        $data['content'] .= 'You owe ' . $data['creator_name'] . ' <b>' . $data['owe_amount'] . '.</b><br>';
     } else {
-        $data['content'] .= $data['creator_name'] . ' owes you <b>' . $data['owe_amount']*(-1) . '</b>.';
+        $data['content'] .= $data['creator_name'] . ' owes you <b>' . $data['owe_amount']*(-1) . '.</b><br>.';
     }
 
     $data['content'] .= 'Bank name: ' . $data['creator_bank_name'] . '<br>';
