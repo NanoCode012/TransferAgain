@@ -43,4 +43,7 @@
     // Mail
     $m_mailsent = 'E-Mail sent';
     $m_mailfailedsend = 'Failed to send e-mail';
+
+    // Bank
+    $banks = array('TMB', 'KTB', 'KBank');
 ?>

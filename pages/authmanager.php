@@ -34,6 +34,8 @@ if (isset($_POST['login'])) {
 } elseif (isset($_POST['register'])) {
     $dict = [
         'password' => '0',
+        'bank_name' => '0',
+        'bank_num' => '0',
     ];
 
     checkDictwithPOST($dict, $msgBox);
@@ -53,15 +55,27 @@ if (isset($_POST['login'])) {
 
         if ($result == 0) {
             if (
-                $stmt = $db->insert('users', [
-                    'username' => $dict['username'],
-                    'password' => $password_hash,
-                    'student_id' => $_SESSION['student_id'],
-                    'display_name' => $_SESSION['student_name'],
+                $db->insert('banks', [
+                    'name' => $dict['bank_name'],
+                    'number' => $dict['bank_num'],
                 ])
             ) {
-                session_destroy();
-                $msgBox = success($m_registersuccess);
+                $dict['bank_id'] = $db->cell('select max(id) from banks');
+
+                if (
+                    $db->insert('users', [
+                        'username' => $dict['username'],
+                        'password' => $password_hash,
+                        'student_id' => $_SESSION['student_id'],
+                        'display_name' => $_SESSION['student_name'],
+                        'bank_id' => $dict['bank_id'],
+                    ])
+                ) {
+                    session_destroy();
+                    $msgBox = success($m_registersuccess);
+                } else {
+                    $msgBox = error($m_registererror);
+                }
             } else {
                 $msgBox = error($m_registererror);
             }

@@ -35,6 +35,20 @@
             <input type="password" name="password" class="form-control">
         </div>
         <div class="form-group">
+            <label>Bank</label>
+            <select name="bank_name" class="form-control">
+            <?php 
+                foreach ($banks as $bank) {
+                    echo '<option value="' . $bank . '">' . $bank . '</option>'; 
+                }
+            ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Bank Number</label>
+            <input type="text" name="bank_num" class="form-control">
+        </div>
+        <div class="form-group">
             <button name="register" type="submit" class="btn btn-primary">Register</button>
             <a href="?p=logout" class="btn btn-dark">Cancel</a>
         </div>

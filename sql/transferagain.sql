@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 24, 2021 at 06:02 AM
+-- Generation Time: Jan 25, 2021 at 01:18 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -74,6 +74,24 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banks`
+--
+
+DROP TABLE IF EXISTS `banks`;
+CREATE TABLE `banks` (
+  `id` int(11) NOT NULL,
+  `name` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `number` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `banks`:
+--
 
 -- --------------------------------------------------------
 
@@ -193,7 +211,8 @@ CREATE TABLE `transaction` (
   `event_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `owe_amount` int(11) NOT NULL,
-  `transaction_status` int(11) NOT NULL DEFAULT '0'
+  `transaction_status` tinyint(1) NOT NULL DEFAULT '0',
+  `email_sent` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -217,11 +236,14 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `student_id` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `display_name` text COLLATE utf8_unicode_ci,
+  `bank_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- RELATIONSHIPS FOR TABLE `users`:
+--   `bank_id`
+--       `banks` -> `id`
 --
 
 -- --------------------------------------------------------
@@ -236,6 +258,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `banks`
+--
+ALTER TABLE `banks`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `events`
@@ -272,11 +300,18 @@ ALTER TABLE `transaction`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `bank_id` (`bank_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `banks`
+--
+ALTER TABLE `banks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -332,6 +367,12 @@ ALTER TABLE `events_members`
 ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`bank_id`) REFERENCES `banks` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

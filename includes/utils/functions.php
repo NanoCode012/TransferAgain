@@ -103,6 +103,9 @@ function sendEmail($data) {
         $data['content'] .= $data['creator_name'] . ' owes you <b>' . $data['owe_amount']*(-1) . '</b>.';
     }
 
+    $data['content'] .= 'Bank name: ' . $data['creator_bank_name'] . '<br>';
+    $data['content'] .= 'Bank number: ' . $data['creator_bank_number'] . '<br>';
+
     $email = new \SendGrid\Mail\Mail(); 
     $email->setFrom($mail_from, "TransferAgain");
     $email->setSubject($data['subject']);

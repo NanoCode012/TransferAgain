@@ -279,16 +279,20 @@ if (isset($_POST['create_event'])) {
     checkDictwithPOST($dict, $msgBox);
 
     if (!isset($msgBox)) {
-        $creator_name = $db->cell('select u.display_name from transaction t, users u, events e where t.event_id = e.id and e.creator_id = u.id');
+        $creator = $db->row('select u.display_name, b.name, b.number from users u, events e, banks b where e.creator_id = u.id and u.bank_id = b.id and e.id = ?', $dict['event_id']);
 
         if ($dict['transaction_id'] != -1) {
             $row = $db->row('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.id = ? and t.event_id = ?', $dict['transaction_id'], $dict['event_id']);
-            $row['creator_name'] = $creator_name;
+            $row['creator_name'] = $creator['display_name'];
+            $row['creator_bank_name'] = $creator['name'];
+            $row['creator_bank_num'] = $creator['number'];
             $r = sendEmail($row);
         } else {
             $rows = $db->run('select u.student_id, u.display_name, t.owe_amount, t.event_id, e.event_name from users u, transaction t, events e where t.user_id = u.id and e.id = t.event_id and t.email_sent = 0 and t.event_id = ?', $dict['event_id']);
             foreach ($rows as $row) {
-                $row['creator_name'] = $creator_name;
+                $row['creator_name'] = $creator['display_name'];
+                $row['creator_bank_name'] = $creator['name'];
+                $row['creator_bank_num'] = $creator['number'];
                 $r = sendEmail($row);
                 if ($r == 0) break;
             }
