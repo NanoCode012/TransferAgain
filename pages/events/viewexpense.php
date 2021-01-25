@@ -13,7 +13,7 @@ $usersJoined = $db->run(
 ?>
 
 <div class="wrapper">
-    <h2>View Events</h2>
+    <h2>View Expense</h2>
     <div class="d-flex flex-row-reverse">
         <a href="?p=events/viewexpense&id=<?= $_GET['id'] ?>&type=<?= !$_GET['type'] ?>" class="btn btn-secondary">
             <?php if ($_GET['type'] == 0) {
