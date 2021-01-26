@@ -62,7 +62,7 @@
 
                     <a href="?p=events/viewexpense&id=<?= $row['id'] ?>&type=0">
                         <span style="color: Darkgreen;">
-                            <i class="fas fa-search fa-2x"></i>
+                            <i class="fas fa-eye fa-2x"></i>
                         </span>
                     </a>
 
