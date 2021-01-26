@@ -72,6 +72,7 @@ if (isset($_POST['login'])) {
                     ])
                 ) {
                     session_destroy();
+                    session_start();
                     $msgBox = success($m_registersuccess);
                 } else {
                     $msgBox = error($m_registererror);
